@@ -2,12 +2,13 @@ import React, {
   useState, useEffect, useCallback, Fragment,
 } from 'react';
 import QuizResultFilter from './core-components/QuizResultFilter';
-import { checkAnswer, rawMarkup } from './core-components/helpers';
+import { checkAnswer, selectAnswer, rawMarkup } from './core-components/helpers';
 import InstantFeedback from './core-components/InstantFeedback';
 import Explanation from './core-components/Explanation';
 
 const Core = function ({
-  questions, appLocale, showDefaultResult, onComplete, customResultPage, showInstantFeedback, continueTillCorrect,
+  questions, appLocale, showDefaultResult, onComplete, customResultPage,
+  showInstantFeedback, continueTillCorrect, revealAnswerOnSubmit,
 }) {
   const [incorrectAnswer, setIncorrectAnswer] = useState(false);
   const [correctAnswer, setCorrectAnswer] = useState(false);
@@ -187,6 +188,17 @@ const Core = function ({
       setUserAttempt,
     });
 
+    const onSelectAnswer = (index) => selectAnswer(index + 1, correctAnswer, answerSelectionType, {
+      userInput,
+      currentQuestionIndex,
+      setButtons,
+      setShowNextQuestionButton,
+      incorrect,
+      correct,
+      setCorrect,
+      setIncorrect,
+    });
+
     // Default single to avoid code breaking due to automatic version upgrade
     answerSelectionType = answerSelectionType || 'single';
 
@@ -195,9 +207,10 @@ const Core = function ({
         {(buttons[index] !== undefined)
           ? (
             <button
+              type="button"
               disabled={buttons[index].disabled || false}
               className={`${buttons[index].className} answerBtn btn`}
-              onClick={() => onClickAnswer(index)}
+              onClick={() => (revealAnswerOnSubmit ? onSelectAnswer(index) : onClickAnswer(index))}
             >
               {questionType === 'text' && <span>{answer}</span>}
               {questionType === 'photo' && <img src={answer} alt="image" />}
@@ -205,7 +218,8 @@ const Core = function ({
           )
           : (
             <button
-              onClick={() => onClickAnswer(index)}
+              type="button"
+              onClick={() => (revealAnswerOnSubmit ? onSelectAnswer(index) : onClickAnswer(index))}
               className="answerBtn btn"
             >
               {questionType === 'text' && answer}
@@ -240,10 +254,14 @@ const Core = function ({
   const renderResult = () => (
     <div className="card-body">
       <h2>
-        {appLocale.resultPageHeaderText.replace('<correctIndexLength>', correct.length).replace('<questionLength>', questions.length)}
+        {appLocale.resultPageHeaderText
+          .replace('<correctIndexLength>', correct.length)
+          .replace('<questionLength>', questions.length)}
       </h2>
       <h2>
-        {appLocale.resultPagePoint.replace('<correctPoints>', correctPoints).replace('<totalPoints>', totalPoints)}
+        {appLocale.resultPagePoint
+          .replace('<correctPoints>', correctPoints)
+          .replace('<totalPoints>', totalPoints)}
       </h2>
       <br />
       <QuizResultFilter
@@ -254,7 +272,6 @@ const Core = function ({
       {renderQuizResultQuestions()}
     </div>
   );
-
   return (
     <div className="questionWrapper">
       {!endQuiz
