@@ -19,6 +19,7 @@ const App = function () {
       showInstantFeedback
       continueTillCorrect
       onComplete={setQuizResult}
+      revealAnswerOnSubmit
     />
   );
 };

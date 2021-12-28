@@ -158,7 +158,6 @@ export const selectAnswer = (index, correctAnswer, answerSelectionType, {
   setCorrect,
   setIncorrect,
 }) => {
-  console.log(correctAnswer, correct, incorrect);
   const selectedButtons = {
     0: { selected: false },
     1: { selected: false },
@@ -212,7 +211,7 @@ export const selectAnswer = (index, correctAnswer, answerSelectionType, {
       let exactMatch = true;
       for (const input of userInput[currentQuestionIndex]) {
         if (!correctAnswer.includes(input)) {
-          exactMatch=false;
+          exactMatch = false;
           if (incorrect.indexOf(currentQuestionIndex) < 0) {
             incorrect.push(currentQuestionIndex);
           }
