@@ -166,9 +166,8 @@ export const selectAnswer = (index, correctAnswer, answerSelectionType, {
   };
   if (answerSelectionType === 'single') {
     correctAnswer = Number(correctAnswer);
-    if (userInput[currentQuestionIndex] === undefined) {
-      userInput.push(index);
-    }
+    userInput[currentQuestionIndex] = index;
+    
 
     if (index === correctAnswer) {
       if (correct.indexOf(currentQuestionIndex) < 0) {
