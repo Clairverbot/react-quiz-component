@@ -1,4 +1,4 @@
-import marked from 'marked';
+import { marked } from 'marked';
 import dompurify from 'dompurify';
 
 export const rawMarkup = (data) => {
@@ -167,7 +167,6 @@ export const selectAnswer = (index, correctAnswer, answerSelectionType, {
   if (answerSelectionType === 'single') {
     correctAnswer = Number(correctAnswer);
     userInput[currentQuestionIndex] = index;
-    
 
     if (index === correctAnswer) {
       if (correct.indexOf(currentQuestionIndex) < 0) {

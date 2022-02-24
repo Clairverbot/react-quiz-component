@@ -82,8 +82,6 @@ const Core = function ({
     }
   }, [endQuiz, questionSummary]);
 
-
-
   const nextQuestion = (currentQuestionIndex) => {
     setIncorrectAnswer(false);
     setCorrectAnswer(false);
@@ -92,16 +90,14 @@ const Core = function ({
 
     if (currentQuestionIndex + 1 === questions.length) {
       if (userInput.length !== questions.length) {
-        alert("Quiz is incomplete");
-      } else {
-        if(allowNavigation){
-          const submitQuiz = confirm("You have finished all the questions. Submit Quiz now?");
-          if(submitQuiz){
-            setEndQuiz(true);
-          }
-        }else{
+        alert('Quiz is incomplete');
+      } else if (allowNavigation) {
+        const submitQuiz = confirm('You have finished all the questions. Submit Quiz now?');
+        if (submitQuiz) {
           setEndQuiz(true);
         }
+      } else {
+        setEndQuiz(true);
       }
     } else {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
@@ -146,7 +142,6 @@ const Core = function ({
     });
   };
 
-
   const renderQuizResultQuestions = useCallback(() => {
     let filteredQuestions;
     let filteredUserInput;
@@ -182,7 +177,9 @@ const Core = function ({
   }, [endQuiz, filteredValue]);
 
   const renderAnswers = (question, buttons) => {
-    const { answers, correctAnswer, questionType, questionIndex } = question;
+    const {
+      answers, correctAnswer, questionType, questionIndex,
+    } = question;
     let { answerSelectionType } = question;
     const onClickAnswer = (index) => checkAnswer(index + 1, correctAnswer, answerSelectionType, {
       userInput,
